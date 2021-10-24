@@ -1,0 +1,3 @@
+cmd/doas/doas
+vendor/
+.idea/
