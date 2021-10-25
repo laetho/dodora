@@ -13,3 +13,6 @@ they might have lost their way.
 >The goal is to have the smallest delta between HEAD and what's 
  running in production.
 
+## Status
+
+This project is far from a MVP state. Project is in inception state.

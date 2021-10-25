@@ -1,14 +1,15 @@
 package deliveries
 
-import(
+import (
 	"fmt"
-	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	"os"
-	ctrl "sigs.k8s.io/controller-runtime"
 
 	dtv1 "github.com/laetho/deliverytracker/apis/deliverytracker/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
+	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
+	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 )
 
 var (
@@ -24,11 +25,14 @@ func init() {
 // sync with what is in kubernets.
 func Run() {
 
+	ctrl.SetLogger(zap.New())
+	ctrl.Log.WithName("controller")
+
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
-		LeaderElection: false,
-		Scheme: scheme,
-		Port: 9443,
-		MetricsBindAddress: ":8081",
+		LeaderElection:         false,
+		Scheme:                 scheme,
+		Port:                   9443,
+		MetricsBindAddress:     ":8081",
 		HealthProbeBindAddress: ":8082",
 	})
 	if err != nil {
@@ -40,6 +44,7 @@ func Run() {
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
+
 		os.Exit(1)
 	}
 

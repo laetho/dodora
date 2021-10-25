@@ -2,12 +2,12 @@ package deliveries
 
 import (
 	"context"
-	"fmt"
-	dtv1 "github.com/laetho/deliverytracker/apis/deliverytracker/v1"
 
+	dtv1 "github.com/laetho/deliverytracker/apis/deliverytracker/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/log"
 )
 
 type DeliveriesReconciler struct {
@@ -16,13 +16,13 @@ type DeliveriesReconciler struct {
 }
 
 func (r *DeliveriesReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	_ = log.FromContext(ctx)
 
 	var delivery dtv1.Delivery
 
 	if err := r.Get(ctx, req.NamespacedName, &delivery); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
-	fmt.Println(delivery)
 
 	return ctrl.Result{}, nil
 }
